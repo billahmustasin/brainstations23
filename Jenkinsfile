@@ -16,11 +16,16 @@ pipeline {
             }
         }
         stage("psuh"){
+             when {
+                expression { env.BRANCH_NAME ==~ /^release\/.*$/ }
+            }
             steps{
+                def releaseVersion = env.RELEASE_TAG
+                echo "Release version: ${releaseVersion}"
                 withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
                 sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                sh "docker tag weather:latest ${env.dockerHubUser}/weather:latest"
-                sh "docker push ${env.dockerHubUser}/weather:latest"
+                sh "docker tag weather:latest ${env.dockerHubUser}/weather:${releaseVersion}"
+                sh "docker push ${env.dockerHubUser}/weather:${releaseVersion}"
             }
         }
     }
