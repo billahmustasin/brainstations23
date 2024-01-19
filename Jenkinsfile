@@ -11,14 +11,18 @@ pipeline {
         }
         stage("build and test"){
             steps{
-                sh "docker build -t weather ."
+                sh "docker build -t weather:latest ."
                 echo 'code builded'
             }
         }
-        stage("scan image"){
+        stage("psuh"){
             steps{
-                echo 'image scanned'
+                withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
+                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
+                sh "docker tag weather:latest ${env.dockerHubUser}/weather:latest"
+                sh "docker push ${env.dockerHubUser}/weather:latest"
             }
         }
     }
+}
 }
