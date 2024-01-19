@@ -15,17 +15,16 @@ pipeline {
                 echo 'code builded'
             }
         }
-        stage("psuh"){
-             when {
-                expression { env.BRANCH_NAME ==~ /^release\/.*$/ }
-            }
+        stage("push"){
             steps{
-                def releaseVersion = env.RELEASE_TAG
-                echo "Release version: ${releaseVersion}"
-                withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
-                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                sh "docker tag weather:latest ${env.dockerHubUser}/weather:${releaseVersion}"
-                sh "docker push ${env.dockerHubUser}/weather:${releaseVersion}"
+                script {
+                    def releaseVersion = env.RELEASE_TAG
+                    echo "Release version: ${releaseVersion}"
+                    withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
+                    sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
+                    sh "docker tag weather:latest ${env.dockerHubUser}/weather:${releaseVersion}"
+                    sh "docker push ${env.dockerHubUser}/weather:${releaseVersion}"
+                }
             }
         }
     }
