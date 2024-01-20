@@ -19,7 +19,7 @@ pipeline {
             steps{
                 script {
 
-                    def releaseVersion = env.GITHUB_RELEASE_NAME
+                    def releaseVersion = sh(script: 'curl -s https://api.github.com/repos/billahmustasin/brainstations23/releases/latest | jq -r .tag_name', returnStdout: true).trim()
                     echo "Release Version: ${releaseVersion}"
                     withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
                     sh "sed -i 's/RELEASE_VERSION/${releaseVersion}/' Dockerfile"
