@@ -15,13 +15,6 @@ pipeline {
                 echo 'code builded'
             }
         }
-        stage('Print Environment Variables') {
-            steps {
-                script {
-                    sh 'env'
-                }
-            }
-        }
         stage("push"){
             steps{
                 script {
