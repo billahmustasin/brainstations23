@@ -18,10 +18,14 @@ pipeline {
         stage("push"){
             steps{
                 script {
+
+                    def releaseVersion = env.GITHUB_RELEASE_NAME
+                    echo "Release Version: ${releaseVersion}"
                     withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
+                    sh "sed -i 's/RELEASE_VERSION/${releaseVersion}/' Dockerfile"
                     sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                    sh "docker tag weather:latest ${env.dockerHubUser}/weather:${BUILD_ID}"
-                    sh "docker push ${env.dockerHubUser}/weather:${BUILD_ID}"
+                    sh "docker tag weather:latest ${env.dockerHubUser}/weather:${releaseVersion}"
+                    sh "docker push ${env.dockerHubUser}/weather:${releaseVersion}"
                 }
             }
         }
