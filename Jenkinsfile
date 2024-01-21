@@ -20,22 +20,24 @@ pipeline {
                 script {
 
                     def releaseVersion = sh(script: 'curl -s https://api.github.com/repos/billahmustasin/brainstations23/releases/latest | jq -r .tag_name', returnStdout: true).trim()
+                    env.releaseversion = "$releaseVersion"
                     withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
                     sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
                     sh "docker tag weather:latest ${env.dockerHubUser}/weather:${releaseVersion}"
-                    sh "docker push ${env.dockerHubUser}/weather:${releaseVersion}"
+                    sh "docker push ${env.dockerHubUser}/weather:${releaseversion}"
                 }
             }
         }
     }
     stage('environment and deploy') {
-        environment {
-        app_name = "api-application"
-    }
+    //     environment {
+    //     app_name = "api-application"
+    // }
     steps {
         script {
-            sh 'envsubst < kubernetes/deployment.yaml | kubectl apply -f - --validate=false'
-            sh 'envsubst < kubernetes/service.yaml | kubectl apply -f - --validate=false'
+            echo 'hello'
+            // sh 'envsubst < kubernetes/deployment.yaml | kubectl apply -f -'
+            // sh 'envsubst < kubernetes/service.yaml | kubectl apply -f -'
         }
      }
   }
