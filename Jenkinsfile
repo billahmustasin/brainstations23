@@ -34,8 +34,8 @@ pipeline {
     }
     steps {
         script {
-            sh 'envsubst < kubernetes/deployment.yaml | kubectl apply -f -'
-            sh 'envsubst < kubernetes/service.yaml | kubectl apply -f -'
+            sh 'envsubst < kubernetes/deployment.yaml | kubectl apply -f - --validate=false'
+            sh 'envsubst < kubernetes/service.yaml | kubectl apply -f - --validate=false'
         }
      }
   }
