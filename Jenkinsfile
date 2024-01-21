@@ -31,6 +31,8 @@ pipeline {
     }
     stage('environment and deploy') {
         environment {
+        aws_access_key_id = credentials('aws_access_key')
+        aws_secret_access_key = credentials('aws_secret_access_key')
         app_name = "api-application"
     }
     steps {
