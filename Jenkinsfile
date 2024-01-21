@@ -3,6 +3,13 @@ pipeline {
     
     stages {
         
+        stage('path') {
+            steps {
+                script {
+                    env.PATH = "${tool 'kubectl'}/bin:${env.PATH}"
+                }
+            }
+        }
         stage("code"){
             steps{
                 git url: "https://github.com/billahmustasin/brainstations23.git", branch: "main"
