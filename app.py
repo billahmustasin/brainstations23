@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify
 import platform
 import datetime
@@ -33,8 +34,13 @@ def hello():
 
     return jsonify(response)
 
+
 def get_weather_data(city):
-    api_key = 'fd0dd7a2a173cdace121681a058e031f'
+    api_key = os.environ.get('OPENWEATHER_API_KEY')
+    if not api_key:
+        print("Error: OpenWeather API key not set.")
+        return None
+
     base_url = 'http://api.openweathermap.org/data/2.5/weather'
     params = {'q': city, 'appid': api_key, 'units': 'metric'}
 
