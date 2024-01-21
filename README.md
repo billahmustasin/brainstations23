@@ -71,4 +71,4 @@ I had to install kubectl, aws-iam-authenticator & aws cli (to add aws credential
 
 Inside "kubernetes/secret.yaml" file I have kept base 64 encoded 3rd party weather api key and used the reference in deployment file.
 
-####################
+#####################
