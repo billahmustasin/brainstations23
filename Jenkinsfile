@@ -30,14 +30,14 @@ pipeline {
         }
     }
     stage('environment and deploy') {
-    //     environment {
-    //     app_name = "api-application"
-    // }
+        environment {
+        app_name = "api-application"
+    }
     steps {
         script {
             echo 'hello'
-            // sh 'envsubst < kubernetes/deployment.yaml | kubectl apply -f -'
-            // sh 'envsubst < kubernetes/service.yaml | kubectl apply -f -'
+            sh 'envsubst < kubernetes/deployment.yaml | kubectl apply -f -'
+            sh 'envsubst < kubernetes/service.yaml | kubectl apply -f -'
         }
      }
   }
