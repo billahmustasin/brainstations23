@@ -1,35 +1,8 @@
-provider "aws" {
- region = var.region
-}
-
-module "vpc" {
- source = "terraform-aws-modules/vpc/aws"
- version = "~> 4.0"
-
- name = var.name
- cidr = var.vpc_cidr
-
- azs             = var.azs
- private_subnets = var.private_subnets
- public_subnets = var.public_subnets
- intra_subnets   = var.intra_subnets
-
- enable_nat_gateway = true
-
- public_subnet_tags = {
-    "kubernetes.io/role/elb" = 1
- }
-
- private_subnet_tags = {
-    "kubernetes.io/role/internal-elb" = 1
- }
-}
-
 module "eks" {
  source = "terraform-aws-modules/eks/aws"
  version = "19.15.1"
 
- cluster_name                   = var.name
+ cluster_name                   = local.name
  cluster_endpoint_public_access = true
 
  cluster_addons = {
@@ -69,4 +42,6 @@ module "eks" {
       }
     }
  }
+
+ tags = local.tags
 }

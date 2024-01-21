@@ -14,17 +14,15 @@ spec:
       labels:
         app: $app_name
     spec:
-      imagePullSecrets:
-        - name: my-registry-key
       containers:
         - name: $app_name
           image: billahmustasin/weather:$releaseversion
           imagePullPolicy: Always
-          env:
-          - name: OPENWEATHER_API_KEY
-            valueFrom:
-            secretKeyRef:
-              name: weather-api-secret
-              key: OPENWEATHER_API_KEY
           ports:
             - containerPort: 5000
+          env:
+            - name: OPENWEATHER_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: weather-api-secret
+                  key: OPENWEATHER_API_KEY
